@@ -1,5 +1,6 @@
 // Para recuperar el tipado en el visual studio
 const { response } = require('express');
+const bcrypt = require('bcryptjs');
 const Usuario = require('../models/Usuario');
 
 const crearUsuario = async (req, res = response) => {
@@ -15,6 +16,11 @@ const crearUsuario = async (req, res = response) => {
     }
     /*Si no existe guardamos el usuario en la base de datos */
     usuario = new Usuario(req.body);
+
+    //Encriptar Contraseña
+    const salt = bcrypt.genSaltSync();
+    usuario.password = bcrypt.hashSync(password, salt);
+
     await usuario.save();
     res.status(201).json({
       ok: true,
