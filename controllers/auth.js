@@ -1,18 +1,27 @@
 // Para recuperar el tipado en el visual studio
 const { response } = require('express');
+const Usuario = require('../models/Usuario');
 
-const crearUsuario = (req, res = response) => {
-  const { name, email, password } = req.body;
+const crearUsuario = async (req, res = response) => {
+  // const { name, email, password } = req.body;
 
-  // Manejo de errores
+  try {
+    const usuario = new Usuario(req.body);
 
-  res.status(201).json({
-    ok: true,
-    msg: 'register',
-    name,
-    email,
-    password,
-  });
+    await usuario.save();
+    // Manejo de errores
+
+    res.status(201).json({
+      ok: true,
+      msg: 'register',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: 'Por favor, hable con el admin',
+    });
+  }
 };
 
 const loginUsuario = (req, res = response) => {
