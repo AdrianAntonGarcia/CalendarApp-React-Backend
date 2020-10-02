@@ -3,17 +3,23 @@ const { response } = require('express');
 const Usuario = require('../models/Usuario');
 
 const crearUsuario = async (req, res = response) => {
-  // const { name, email, password } = req.body;
-
+  const { email, password } = req.body;
   try {
-    const usuario = new Usuario(req.body);
-
+    let usuario = await Usuario.findOne({ email });
+    /*Si el usuario existe mandamos error */
+    if (usuario) {
+      return res.status(400).json({
+        ok: false,
+        msg: 'Un usuario existe con ese correo',
+      });
+    }
+    /*Si no existe guardamos el usuario en la base de datos */
+    usuario = new Usuario(req.body);
     await usuario.save();
-    // Manejo de errores
-
     res.status(201).json({
       ok: true,
-      msg: 'register',
+      uid: usuario.id,
+      name: usuario.name,
     });
   } catch (error) {
     console.log(error);
