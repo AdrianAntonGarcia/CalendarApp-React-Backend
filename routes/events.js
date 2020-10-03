@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const { validarJWT } = require('../middlewares/validar-jwt');
 const {
   getEventos,
   crearEvento,
@@ -7,7 +7,12 @@ const {
   eliminarEvento,
 } = require('../controllers/events');
 // Todas tienen que pasar por la validación del JWT
-// Obtener eventos
+
+const router = express.Router();
+// Podemos subir de nivel el validarJWT ya que lo tenemos para todas las rutas
+// Middleware general a todas las rutas de este archivo
+router.use(validarJWT);
+
 router.get('/', getEventos);
 
 // Crear un nuevo evento
