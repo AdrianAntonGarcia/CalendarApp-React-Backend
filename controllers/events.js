@@ -1,6 +1,5 @@
 const { response, request } = require('express');
 
-
 const getEventos = async (req = request, res = response) => {
   res.status(201).json({
     ok: true,
@@ -9,6 +8,8 @@ const getEventos = async (req = request, res = response) => {
 };
 
 const crearEvento = async (req, res = response) => {
+  // verificar que tenga el evento.
+  console.log(req.body);
   res.status(201).json({
     ok: true,
     msg: 'crear evento',
